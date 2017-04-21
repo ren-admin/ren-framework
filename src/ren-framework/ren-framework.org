@@ -14,6 +14,7 @@ then we will enable the capability by using a style sheet (called
 herein as Semantic Style Sheet), and then finally by pre-programming
 the required workflow engine to take the SSS and turn it into a output
 target variant.
+
 [[images/ren-framework.png][Transformation Framework]]
 
 ** Types of transformation
