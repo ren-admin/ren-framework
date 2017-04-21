@@ -14,7 +14,7 @@
   herein as Semantic Style Sheet), and then finally by pre-programming
   the required workflow engine to take the SSS and turn it into a output
   target variant.
-                     [[images/ren-framework.png]]
+  [[images/ren-framework.png]]
 
 ** Types of transformation
 + We wish to perform 4 categories of transformations: Node level
