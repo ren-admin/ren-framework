@@ -4,27 +4,27 @@
 
 ** Introduction
 + Our objective is to build a transformation framework which takes in as
-input one or more web sources and converts them to one or more
-transformed target variants. The transformation process will take in
-as input a script and some augmented content, which it will use for
-creating the variants
+  input one or more web sources and converts them to one or more
+  transformed target variants. The transformation process will take in
+  as input a script and some augmented content, which it will use for
+  creating the variants
 
 + We will first begin by developing the capability for transformation,
-then we will enable the capability by using a style sheet (called
-herein as Semantic Style Sheet), and then finally by pre-programming
-the required workflow engine to take the SSS and turn it into a output
-target variant.
+  then we will enable the capability by using a style sheet (called
+  herein as Semantic Style Sheet), and then finally by pre-programming
+  the required workflow engine to take the SSS and turn it into a output
+  target variant.
 [[images/ren-framework.png]]
 
 ** Types of transformation
 + We wish to perform 4 categories of transformations: Node level
-modification, Content level modifications, Style level modifications,
-and Behavior level modifications. For each of these categories, we
-wish to enable CRUD operations. These operations should be applicable
-to the following modes of digital content: Text, Image, Video, Audio.
+  modification, Content level modifications, Style level modifications,
+  and Behavior level modifications. For each of these categories, we
+  wish to enable CRUD operations. These operations should be applicable
+  to the following modes of digital content: Text, Image, Video, Audio.
 
 + Here are the table of requirements.There are 4 DOM Transformations to
-be done with reference to the source DOM of Web page.
+  be done with reference to the source DOM of Web page.
 
 | Dom Transformations | Create(C) | Read(R) | Update(U) | Delete(D) |
 |---------------------+-----------+---------+-----------+-----------|
