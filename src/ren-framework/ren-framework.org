@@ -1,0 +1,193 @@
+#+title: Renarration Framework
+#+AUTHOR: 
+#+DATE: [2017-04-17 Mon]
+
+** Introduction
+Our objective is to build a transformation framework which takes in as
+input one or more web sources and converts them to one or more
+transformed target variants. The transformation process will take in
+as input a script and some augmented content, which it will use for
+creating the variants
+
+We will first begin by developing the capability for transformation,
+then we will enable the capability by using a style sheet (called
+herein as Semantic Style Sheet), and then finally by pre-programming
+the required workflow engine to take the SSS and turn it into a output
+target variant.
+[[ren-framework.png][Transformation Framework]]
+
+** Types of transformation
+We wish to perform 4 categories of transformations: Node level
+modification, Content level modifications, Style level modifications,
+and Behavior level modifications. For each of these categories, we
+wish to enable CRUD operations. These operations should be applicable
+to the following modes of digital content: Text, Image, Video, Audio.
+
+Here are the table of requirements.There are 4 DOM Transformations to
+be done with reference to the source DOM of Web page.
+
+| Dom Transformations | Create(C) | Read(R) | Update(U) | Delete(D) |
+|---------------------+-----------+---------+-----------+-----------|
+| Text Node           |           |         |           |           |
+|---------------------+-----------+---------+-----------+-----------|
+| Content             | CCN1      | RCN2    | UCN3      | DCN4      |
+|---------------------+-----------+---------+-----------+-----------|
+| Style               | CSN5      | RSN6    | USN7      | DSN8      |
+|---------------------+-----------+---------+-----------+-----------|
+| Behaviour           | CBN9      | RBN10   | UBN11     | DBN12     |
+|---------------------+-----------+---------+-----------+-----------|
+| Flow                | CFN13     | CFN14   | CFN15     | CFN16     |
+|---------------------+-----------+---------+-----------+-----------|
+|                     |           |         |           |           |
+
+
+| Transformations | Description                                                 |   |
+|-----------------+-------------------------------------------------------------+---|
+| CCN1            | Should be create a Node and insert a node into the DOM.     |   |
+|-----------------+-------------------------------------------------------------+---|
+| RCN2            | Should be able to Read the text inside the node.            |   |
+|-----------------+-------------------------------------------------------------+---|
+| UCN3            | Should be able to replace/Update the content inside the     |   |
+|                 | node.                                                       |   |
+|-----------------+-------------------------------------------------------------+---|
+| DCN4            | Should be able to delete the Node of the DOM                |   |
+|-----------------+-------------------------------------------------------------+---|
+| CSN5            | Should be able to change/modify the css of a Node in DOM    |   |
+|                 |                                                             |   |
+|-----------------+-------------------------------------------------------------+---|
+| RSN6            | Should be able to Read the CSS of a Node.                   |   |
+|-----------------+-------------------------------------------------------------+---|
+| USN7            | Should be able to style the Node based on user requirement. |   |
+|                 |                                                             |   |
+|-----------------+-------------------------------------------------------------+---|
+| DSN8            | Should be able to remove the css of a node.                 |   |
+|-----------------+-------------------------------------------------------------+---|
+| CBN9            | Should be able to do lang Translation/phonetic translation  |   |
+|                 | to the text in the Node.                                    |   |
+|-----------------+-------------------------------------------------------------+---|
+|                 |                                                             |   |
+
+
+*** Scope v0.1
+For v0.1 we will only work with CRUD of NODE for TEXT only.
+
+**** Function to create the Node inside the DOM. 
+
+#+BEGIN_SRC js :tangle ../../code/DOM_Transformations/text_trans.js :eval no
+
+createNode("p", "This is newly added content", "body")
+
+function createNode(type, content, insertPnt ){
+    var para = document.createElement(type);
+    var node = document.createTextNode(content);
+    para.appendChild(node);
+    var element = document.getElementsByTagName(insertPnt);
+    element.appendChild(para);
+}
+
+#+END_SRC
+
+**** Function to replace/update the Node inside the DOM. 
+
+#+BEGIN_SRC js :tangle ../../code/DOM_Transformations/text_trans.js :eval no
+
+ReplaceNode("sourceNodeId" "div","body")
+
+function replaceNode(id, type, insertPnt ){
+    var sourceNode = document.getElementById(id);
+    var replaceNode = document.createElement(type);
+    var element = document.getElementsByTagName(insertPnt);
+    sourceNode.parentNode.replaceChild(sourceNode, replaceNode);
+    #$( "div.second" ).replaceWith( "<h2>New heading</h2>" );
+}
+
+#+END_SRC
+
+
+** function =deleteNode()=
++ Function to Delete the Node inside the DOM. 
+#+BEGIN_SRC js :tangle ../../code/DOM_Transformations/text_trans.js :eval no
+
+deleteNode("h3", "hello")
+function deleteNode(targetnode, nodeId){
+  var xhttp = new XMLHttpRequest();
+  xhttp.open("POST", "//localhost:5000/DeleteNode", true); 
+  xhttp.setRequestHeader("Access-Control-Allow-Origin", "*");
+  xhttp.setRequestHeader("Content-Type", "application/json; charset=UTF-8");
+  xhttp.send(JSON.stringify({"node":targetnode, "id":nodeId}));
+  xhttp.onreadystatechange = function() {
+        if (this.readyState == 4 && this.status == 200) {
+            document.getElementsByTagName("body").innerHTML =
+            this.responseText;
+	}
+  };
+}
+
+#+END_SRC
+
+** Function =replaceNode=
++ Function to replace the Node 
+#+BEGIN_SRC js :tangle ../../code/DOM_Transformations/text_trans.js :eval no
+
+replaceNode("h3", "h1")
+function replaceNode(sourcenode, replacenode){
+  var xhttp = new XMLHttpRequest();
+  xhttp.open("POST", "//localhost:5000/replaceNode", true); 
+  xhttp.setRequestHeader("Access-Control-Allow-Origin", "*");
+  xhttp.setRequestHeader("Content-Type", "application/json; charset=UTF-8");
+  xhttp.send(JSON.stringify({"sourcenode":sourcenode, "replacenode":replacenode}));
+  xhttp.onreadystatechange = function() {
+        if (this.readyState == 4 && this.status == 200) {
+            document.getElementsByTagName("body")[0].innerHTML =
+            this.responseText;
+	}
+  };
+}
+
+#+END_SRC
+
+** function =changeContent()=
++ Function to change the text inside the Node
+#+BEGIN_SRC js :tangle ../../code/DOM_Transformations/text_trans.js :eval no
+
+changeContent("h3", "The is the new content")
+function changeContent(tag, modifyText){
+  var xhttp = new XMLHttpRequest();
+  xhttp.open("POST", "//localhost:5000/changeContent", true); 
+  xhttp.setRequestHeader("Access-Control-Allow-Origin", "*");
+  xhttp.setRequestHeader("Content-Type", "application/json; charset=UTF-8");
+  xhttp.send(JSON.stringify({"tag":tag, "modifyText":modifyText}));
+  xhttp.onreadystatechange = function() {
+        if (this.readyState == 4 && this.status == 200) {
+            document.getElementsByTagName("body")[0].innerHTML =
+            this.responseText;
+	}
+  };
+}
+#+END_SRC
+
+** Dependencies 
++ For setting up virtual environment and installing other
+  packages to run the application.
+ 
+#+BEGIN_SRC bash :tangle ../../code/webservices/setup.sh :eval no
+  sudo apt-get install python-virtualenv
+  
+  virtualenv flask
+  
+  flask/bin/pip install flask
+
+  flask/bin/pip install flask-login
+
+  flask/bin/pip install requests
+
+  flask/bin/pip install requests
+
+  flask/bin/pip install bs4
+
+  flask/bin/pip install python-dateutil
+
+  flask/bin/pip install datetime
+
+  flask/bin/pip install -U flask-cors
+#+End_src

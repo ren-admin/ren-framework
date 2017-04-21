@@ -1,0 +1,102 @@
+#+Title:Webservices for CRUD operations
+#+Date:[18-04-2017, TUE]
+
+** Role 
+To build the webservices to perform the CRUD operations on DOM.
+
+** imports
+#+Begin_src python :tangle ../../code/webservices/text_trans.py
+from flask import Flask
+from flask import request
+from flask_cors import CORS
+from flask import request
+import requests as req
+import urllib2
+#from htmldom import htmldom
+from bs4 import BeautifulSoup, Tag
+app = Flask(__name__)
+CORS(app)
+
+#+end_src
+
+** API's to perform the crud operations on a node.
+*** API to =delete the node= in DOM Source.
+#+Begin_src python :tangle ../../code/webservices/text_trans.py
+
+@app.route("/DeleteNode", methods=['POST'])
+def DeleteNode():
+  try:
+      targetnode = request.json['node']
+  except:
+      return "targetnode parameter is not passed"
+  try:
+      nodeId = request.json['id']
+  except:
+      return "nodeId parameter is not passed"
+  page = urllib2.urlopen('http://www.vlabs.ac.in').read()
+  soup = BeautifulSoup(page)
+  #soup.find(targetnode).decompose()
+  soup.find('h3').extract()
+  #soup.find(targetnode, id=nodeId).decompose()
+  htmldom = soup.prettify()
+  return htmldom
+
+#+end_src
+
+*** API to =replace the node= in DOM Source.
+#+Begin_src python :tangle ../../code/webservices/text_trans.py
+@app.route("/replaceNode", methods=['POST'])
+def replaceNode():
+  print "hi"
+  try:
+      sourcenode  = request.json['sourcenode']
+      print sourcenode
+  except:
+      return "source node parameter is not passed"
+  try:
+      replacenode = request.json['replacenode']
+      print replacenode
+  except:
+      return "replace node parameter is not passed"
+  page = urllib2.urlopen('http://www.vlabs.ac.in').read()
+  soup = BeautifulSoup(page)
+  newnode = BeautifulSoup(str(soup).replace(sourcenode, replacenode))
+  htmldom = newnode.prettify()
+  return htmldom
+#+end_src
+
+*** API to =modify node content= in DOM Source.
+#+Begin_src python :tangle ../../code/webservices/text_trans.py
+@app.route("/changeContent", methods=['POST'])
+def changeContent():
+  try:
+      sourcenode  = request.json['tag']
+      print sourcenode
+  except:
+      return "tag parameter is not passed"
+  try:
+      replacetext = request.json['modifyText']
+      print replacetext
+  except:
+      return "modifyText parameter is not passed"
+
+  page = urllib2.urlopen('http://www.vlabs.ac.in').read()
+  soup = BeautifulSoup(page)
+  domNode= soup.find(sourcenode)
+  domNode.string = replacetext
+  htmldom = soup.prettify()
+  return htmldom
+#+end_src
+
+*** test API
+#+Begin_src python :tangle ../../code/webservices/text_trans.py
+@app.route("/test", methods=['GET'])
+def test():
+  return "some test string"
+#+End_src
+
+** Run the app
+#+Begin_src python :tangle ../../code/webservices/text_trans.py
+if __name__ == '__main__':
+  app.run(debug = True)
+#+end_src
