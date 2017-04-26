@@ -8,7 +8,7 @@
   also not including work on cloud.
 
   The scope of this document is only v0.1, which is defined as "V0.1
-  play only at node level. Add/del¡­ CRUD on nodes. SSS in v0.1 is very
+  play only at node level. Add/delÂ¡Â­ CRUD on nodes. SSS in v0.1 is very
   simple JSON/XML sheet." The other versions for the SSS portion are
   given in [[index.org][index.org]]
  
@@ -92,7 +92,7 @@ info can be such things as user name, user preferences, group
 name... which can be obtained during the user registration.
 
 Structuring of data
-[[images/SSS_v0.1.png][API triggered structure]]
+[[images/SSS_v0.1.png]]
  
 * Tasks to be done
 + Look into "LESS"- this is related  
