@@ -90,8 +90,9 @@ Triggers can be from user data or enviromental data. Environmental
 data includes such things as browser info, date, time etc., . User
 info can be such things as user name, user preferences, group
 name... which can be obtained during the user registration.
+
 *Structuring of data*
-[[images/SSS_v0.1.png]]
+  [[images/SSS_v0.1.png]]
  
 * Tasks to be done
 + Look into "LESS"- this is related  
