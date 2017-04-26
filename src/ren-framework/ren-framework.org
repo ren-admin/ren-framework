@@ -14,8 +14,6 @@
   herein as Semantic Style Sheet), and then finally by pre-programming
   the required workflow engine to take the SSS and turn it into a output
   target variant.
- 
- [[images/ren-framework.png]]
 
 ** Types of transformation
 + We wish to perform 4 categories of transformations: Node level
@@ -104,18 +102,17 @@ function replaceNode(id, type, insertPnt ){
 
 #+END_SRC
 
-
 ** function =deleteNode()=
 + Function to Delete the Node inside the DOM. 
 #+BEGIN_SRC js :tangle ../../code/DOM_Transformations/text_trans.js :eval no
 
-deleteNode("h3", "hello")
-function deleteNode(targetnode, nodeId){
+deleteNode("h2")
+function deleteNode(targetnode){
   var xhttp = new XMLHttpRequest();
-  xhttp.open("POST", "//localhost:5000/DeleteNode", true); 
+  xhttp.open("POST", "//localhost:5000/deleteNode", true); 
   xhttp.setRequestHeader("Access-Control-Allow-Origin", "*");
   xhttp.setRequestHeader("Content-Type", "application/json; charset=UTF-8");
-  xhttp.send(JSON.stringify({"node":targetnode, "id":nodeId}));
+  xhttp.send(JSON.stringify({"tnode":targetnode}));
   xhttp.onreadystatechange = function() {
         if (this.readyState == 4 && this.status == 200) {
             document.getElementsByTagName("body").innerHTML =
@@ -150,7 +147,6 @@ function replaceNode(sourcenode, replacenode){
 ** function =changeContent()=
 + Function to change the text inside the Node
 #+BEGIN_SRC js :tangle ../../code/DOM_Transformations/text_trans.js :eval no
-
 changeContent("h3", "The is the new content")
 function changeContent(tag, modifyText){
   var xhttp = new XMLHttpRequest();
@@ -158,6 +154,66 @@ function changeContent(tag, modifyText){
   xhttp.setRequestHeader("Access-Control-Allow-Origin", "*");
   xhttp.setRequestHeader("Content-Type", "application/json; charset=UTF-8");
   xhttp.send(JSON.stringify({"tag":tag, "modifyText":modifyText}));
+  xhttp.onreadystatechange = function() {
+        if (this.readyState == 4 && this.status == 200) {
+            document.getElementsByTagName("body")[0].innerHTML =
+            this.responseText;
+	}
+  };
+}
+#+END_SRC
+
+** function =languageTrans()=
+#+BEGIN_SRC js :tangle ../../code/DOM_Transformations/text_trans.js :eval no
+langTrans("en", "hi")  
+function langTrans(fromlang, tolang){
+    var text = "";
+    if (window.getSelection) {
+        textt = window.getSelection().toString();
+    } 
+    else if (document.selection && document.selection.type != "Control") {
+        textt = document.selection.createRange().text;
+    }
+    var xhttp = new XMLHttpRequest();
+    xhttp.open("POST", "//localhost:5000/langTrans", true); 
+    xhttp.setRequestHeader("Access-Control-Allow-Origin", "*");
+    xhttp.setRequestHeader("Content-Type", "application/json; charset=UTF-8");
+    xhttp.send(JSON.stringify({"text":textt, "fromlang":fromlang, "tolang":tolang}));
+    xhttp.onreadystatechange = function() {
+        if (this.readyState == 4 && this.status == 200) {
+            alert(this.responseText);
+	    textt.text = this.responseText;
+	}
+    };
+}
+#+END_SRC
+
+** function =changeImage()=
+#+BEGIN_SRC js :tangle ../../code/DOM_Transformations/text_trans.js :eval no
+changeImage("img", "main-logo", "https://upload.wikimedia.org/wikipedia/en/0/07/Shivaji_Univesity_Logo.jpeg")
+function changeImage(tag, cls, src){
+  var xhttp = new XMLHttpRequest();
+  xhttp.open("POST", "//localhost:5000/changeImage", true); 
+  xhttp.setRequestHeader("Access-Control-Allow-Origin", "*");
+  xhttp.setRequestHeader("Content-Type", "application/json; charset=UTF-8");
+  xhttp.send(JSON.stringify({"tag":tag, "cls":cls, "src": src}));
+  xhttp.onreadystatechange = function() {
+        if (this.readyState == 4 && this.status == 200) {
+            document.getElementsByTagName("body")[0].innerHTML =
+            this.responseText;
+	}
+  };
+}
+#+END_SRC
+** function =removeJunk()=
+#+BEGIN_SRC js :tangle ../../code/DOM_Transformations/text_trans.js :eval no
+removeJunk("header", "footer-div")
+function removeJunk(header_tag, footer_tag){
+  var xhttp = new XMLHttpRequest();
+  xhttp.open("POST", "//localhost:5000/removeJunk", true); 
+  xhttp.setRequestHeader("Access-Control-Allow-Origin", "*");
+  xhttp.setRequestHeader("Content-Type", "application/json; charset=UTF-8");
+  xhttp.send(JSON.stringify({"header_tag":header_tag, "footer_tag":footer_tag}));
   xhttp.onreadystatechange = function() {
         if (this.readyState == 4 && this.status == 200) {
             document.getElementsByTagName("body")[0].innerHTML =

@@ -23,20 +23,21 @@ CORS(app)
 *** API to =delete the node= in DOM Source.
 #+Begin_src python :tangle ../../code/webservices/text_trans.py
 
-@app.route("/DeleteNode", methods=['POST'])
-def DeleteNode():
+@app.route("/deleteNode", methods=['POST'])
+def deleteNode():
   try:
-      targetnode = request.json['node']
+      targetnode = request.json['tnode']
+      print targetnode
   except:
       return "targetnode parameter is not passed"
-  try:
-      nodeId = request.json['id']
-  except:
-      return "nodeId parameter is not passed"
+  #try:
+      #nodeId = request.json['id']
+  #except:
+      #return "nodeId parameter is not passed"
   page = urllib2.urlopen('http://www.vlabs.ac.in').read()
   soup = BeautifulSoup(page)
-  #soup.find(targetnode).decompose()
-  soup.find('h3').extract()
+  soup.find(targetnode).decompose()
+  #soup.find(targetnode).extract()
   #soup.find(targetnode, id=nodeId).decompose()
   htmldom = soup.prettify()
   return htmldom
@@ -88,7 +89,71 @@ def changeContent():
   return htmldom
 #+end_src
 
-*** test API
+*** API to =change image src= in DOM Source
+#+Begin_src python :tangle ../../code/webservices/text_trans.py
+@app.route("/changeImage", methods=['POST'])
+def changeImage():
+  try:
+      image = request.json['tag']
+  except:
+      return "tag parameter is not passed"
+  try:
+      image_class = request.json['cls']
+  except:
+      return "image_class parameter is not passed"
+  try:
+      image_src = request.json['src']
+  except:
+      return "image src parameter is not passed"
+  page = urllib2.urlopen('http://www.vlabs.ac.in').read()
+  soup = BeautifulSoup(page)
+  domNode= soup.find(image, {"class", image_class})
+  domNode['src'] = image_src
+  htmldom = soup.prettify()
+  return htmldom
+#+end_src
+*** API to =remove junk= in DOM source
+#+Begin_src python :tangle ../../code/webservices/text_trans.py
+@app.route("/removeJunk", methods=['POST'])
+def removeJunk():
+  try:
+      header_content = request.json['header_tag']
+  except:
+      return "header parameter is not passed"
+  try:
+      footer_content = request.json['footer_tag']
+  except:
+      return "footer parameter is not passed"
+  page = urllib2.urlopen('http://www.vlabs.ac.in').read()
+  soup = BeautifulSoup(page)
+  domNode1= soup.find(header_content).decompose()
+  domNode2= soup.find("div", {"class", footer_content}).decompose()
+  htmldom = soup.prettify()
+  return htmldom
+#+end_src
+*** API to =to translate text= in DOM source 
+#+Begin_src python :tangle ../../code/webservices/text_trans.py
+@app.route("/langTrans", methods=['POST'])
+def langTrans():
+    translatekey = "trnsl.1.1.20170315T015859Z.3e04bd9bd31f6f00.99aa35ddf89167a86f5a892014edf632e9cef14f";
+    try:
+        sentence = request.json['text']
+    except:
+        return "sentence parameter not passed"
+    try :
+        fromlang = request.json['fromlang']
+    except:
+        return "fromlang parameter not passed"
+    try :
+        tolang = request.json['tolang']
+    except:
+        return "tolang parameter not passed"
+    res = req.get('https://translate.yandex.net/api/v1.5/tr/translate?key='+translatekey+'&text='+sentence+'&lang='+fromlang+'-'+tolang+'&format=plain&options=0');
+    soup = BeautifulSoup(res.text)
+    ret = soup.text
+    return ret;
+#+end_src
+** test API
 #+Begin_src python :tangle ../../code/webservices/text_trans.py
 @app.route("/test", methods=['GET'])
 def test():
