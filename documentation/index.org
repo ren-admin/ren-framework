@@ -147,6 +147,8 @@
 ** Renarration Table
 + Maps URLs to likely renarration alternatives; should also have
   descriptions for human reading.
+  
+  [[images/Renarration_table_pic.jpg]]
 
 ** Semantic Style Sheet
 + Is like a conventional Style Sheet (e.g. CSS). It has source
