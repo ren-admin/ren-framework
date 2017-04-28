@@ -27,6 +27,8 @@
     capability for a specific application. We call this "PROBLEM
     SPACE".
 
+ [[images/Renarration_Framework_pic.jpg]]
+
 * Capabilty   
   [[../src/webservices/webservices.org][org file of API's for DOM transformations]]
 * Script
@@ -55,7 +57,7 @@ for our renarration work.
 ** Problem Description - Strip Struct Page
 Most of the web nowadays seems to be dynamically genarated by some
 backend website applications. 
-Eg: Sites include "Amazon","dictionary", "Vlabs".  
+Eg: Sites include "Amazon","Dictionary.com", "Vlabs".  
 Such pages rely on standard templates which contain the core raw content. 
 The standard template features include such things as, Navigation info,
 ads, Links to FB, Twitter..., Corporate info, Promotional items etc.,
@@ -79,6 +81,8 @@ Transformation Engine does renarration on source page to produce a
 target page. We are seeing this as source to taget DOM
 transformation. To make the transformation the engine requires rules(
 Script or instructions ), triggers and tagged content.
+
+[[images/sourceDOM_to_targetDOM_table.jpg]]
 
 The rules are also called script or instructions. They are specific
 instructions that do operations on source DOM to target DOM. There
