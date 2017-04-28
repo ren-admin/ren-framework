@@ -212,7 +212,7 @@
 + SSS design
   - Using SSS as input to transform Source DOM to Target DOM
   - V0.1 play only at node level. Add/del… CRUD on nodes. SSS in v0.1
-    is very simple JSON/XML sheet
+    is very simple JSON/XML sheet. See [[sss_v0.1.org][here]] for more information on this.
   - V0.2 play within the node. CRUD within the nodes. SSS in v0.2 is
     still very simple JSON/XML sheet but has info on the content
     within the node
